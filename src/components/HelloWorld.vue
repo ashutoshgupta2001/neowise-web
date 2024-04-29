@@ -42,13 +42,14 @@ export default {
     return {
       isGtnVisible: false,
       trnID: '',
-      isCanceltrn: false
+      isCanceltrn: false,
+      responseMessage: ''
 
     }
   },
 
   mounted() {
-    console.log('DOM mounted')
+    console.log('DOM mounted');
   },
 
 
@@ -85,14 +86,31 @@ export default {
       axios.delete(`http://127.0.0.1:5000/api/transactions/${this.trnID}`).then(
         response => {
           console.log(response.data)
-        }
-      ).catch(err => { console.log("error", err.message) })
+          this.responseMessage = response.data
+          this.$toast.success(this.responseMessage.message, {
+            position: 'top-right',
+            timeout: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            draggablePercent: 0.6,
+            showCloseButton: true,
+            hideProgressBar: false,
+            closeButton: 'button',
 
-    },
+          })}
+          ).catch(err => {
+            console.log("error", err.response.data.message)
+            this.$toast.error(err.response.data.message, {
 
-  },
+              position: 'top-right'
+            })
+          })
 
-}
+        },
+  }
+
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
